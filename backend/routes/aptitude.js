@@ -107,4 +107,30 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const { topicCovered, durationMinutes } = req.body;
+    const log = await AptitudeLog.findById(req.params.id);
+    if (!log) return res.status(404).json({ error: 'Log not found' });
+    
+    if (topicCovered) log.topicCovered = topicCovered;
+    if (durationMinutes !== undefined) log.durationMinutes = durationMinutes;
+    
+    await log.save();
+    res.json({ message: 'Log updated successfully', log });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const log = await AptitudeLog.findByIdAndDelete(req.params.id);
+    if (!log) return res.status(404).json({ error: 'Log not found' });
+    res.json({ message: 'Log deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

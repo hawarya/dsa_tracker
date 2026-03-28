@@ -55,8 +55,38 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) return <div className="text-white text-center mt-20">Loading...</div>;
-  if (!stats) return <div className="text-white text-center mt-20">Please log in.</div>;
+  if (loading) return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+    </div>
+  );
+  
+  if (!stats) return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      className="max-w-xl mx-auto mt-20 text-center"
+    >
+      <div className="bg-slate-800/80 backdrop-blur-xl p-10 rounded-3xl border border-slate-700 shadow-2xl overflow-hidden relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+        <Target className="w-20 h-20 text-indigo-400 mx-auto mb-6 drop-shadow-lg" />
+        <h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-4">
+          Welcome to Daily DSA Tracker
+        </h2>
+        <p className="text-slate-400 text-lg mb-8">
+          Build consistency. Track your patterns. Conquer your coding goals.
+        </p>
+        <div className="flex gap-4 justify-center">
+          <a href="/login" className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-medium transition-all shadow-lg hover:shadow-indigo-500/25">
+            Sign In
+          </a>
+          <a href="/register" className="px-8 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-medium transition-all shadow-lg">
+            Create Account
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  );
 
   // First time setup check
   if (stats.user.isFirstLogin) {

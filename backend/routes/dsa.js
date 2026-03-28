@@ -85,6 +85,44 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+router.put('/:logId/problem/:problemId', async (req, res) => {
+  try {
+    const { pattern, problemName, difficulty } = req.body;
+    const dsaLog = await DSADaily.findById(req.params.logId);
+    if (!dsaLog) return res.status(404).json({ error: 'Log not found' });
+    
+    const problem = dsaLog.problems.id(req.params.problemId);
+    if (!problem) return res.status(404).json({ error: 'Problem not found' });
+    
+    if (pattern) problem.pattern = pattern;
+    if (problemName) problem.problemName = problemName;
+    if (difficulty) problem.difficulty = difficulty;
+    
+    await dsaLog.save();
+    res.json({ message: 'Problem updated successfully', dsaLog });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.delete('/:logId/problem/:problemId', async (req, res) => {
+  try {
+    const dsaLog = await DSADaily.findById(req.params.logId);
+    if (!dsaLog) return res.status(404).json({ error: 'Log not found' });
+    
+    const problemIndex = dsaLog.problems.findIndex(p => p._id.toString() === req.params.problemId);
+    if (problemIndex === -1) return res.status(404).json({ error: 'Problem not found' });
+    
+    dsaLog.problems.splice(problemIndex, 1);
+    dsaLog.totalCount = dsaLog.problems.length;
+    await dsaLog.save();
+    
+    res.json({ message: 'Problem deleted successfully', dsaLog });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.post('/patterns', async (req, res) => {
   try {
     const { userId, name } = req.body;
