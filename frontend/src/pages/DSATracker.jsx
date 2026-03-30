@@ -240,7 +240,7 @@ const DSATracker = () => {
                                                 </div>
                                                 <div className="flex flex-col items-end gap-2">
                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getDifficultyColor(prob.difficulty)}`}>{prob.difficulty}</span>
-                                                   <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
+                                                   <div className="flex gap-2">
                                                       <button onClick={() => handleEditInit(prob.logId, prob)} className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-slate-700 rounded transition-colors"><Edit2 className="w-3.5 h-3.5"/></button>
                                                       <button onClick={() => handleDelete(prob.logId, prob._id)} className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded transition-colors"><Trash2 className="w-3.5 h-3.5"/></button>
                                                    </div>

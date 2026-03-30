@@ -44,7 +44,7 @@ const AptitudeTracker = () => {
   useEffect(() => {
     fetchCycle();
     fetchHistory();
-    // eslint-disable-next-line
+    
   }, [message]);
 
   const handleSubmit = async (e) => {
@@ -190,10 +190,10 @@ const AptitudeTracker = () => {
                            <>
                              <div className="flex justify-between items-start mb-1">
                                 <h4 className="text-slate-200 font-semibold">{log.topicCovered}</h4>
-                                <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                   <button onClick={() => handleEdit(log)} className="p-1 text-slate-400 hover:text-indigo-400 transition-colors"><Edit2 className="w-4 h-4"/></button>
-                                   <button onClick={() => handleDelete(log._id)} className="p-1 text-slate-400 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4"/></button>
-                                </div>
+                                 <div className="flex items-center gap-2">
+                                    <button onClick={() => handleEdit(log)} className="p-1 text-slate-400 hover:text-indigo-400 transition-colors"><Edit2 className="w-4 h-4"/></button>
+                                    <button onClick={() => handleDelete(log._id)} className="p-1 text-slate-400 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4"/></button>
+                                 </div>
                              </div>
                              <div className="flex justify-between text-xs text-slate-400">
                                 <span>{new Date(log.date).toLocaleDateString()}</span>

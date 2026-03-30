@@ -39,12 +39,7 @@ const Navbar = () => {
                 <LogOut className="w-4 h-4" /><span>Logout</span>
               </button>
             </div>
-          ) : (
-            <div className="flex space-x-4">
-              <Link to="/login" className="text-slate-300 hover:text-white transition-colors">Login</Link>
-              <Link to="/register" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors text-sm font-medium">Sign Up</Link>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
     </nav>
