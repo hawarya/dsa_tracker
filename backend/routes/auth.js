@@ -52,5 +52,13 @@ router.put('/setup', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+router.get('/user',async (req,res)=>{
+  try{
+    res.send(user);
+  }
+  catch(error){
+    res.status(500).json({ error: 'Server error' });
+  }
+})
 
 module.exports = router;
