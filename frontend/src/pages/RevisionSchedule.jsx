@@ -31,9 +31,9 @@ const RevisionSchedule = () => {
       if (!user) return;
       
       const [revRes, dsaRes, aptiRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/revision/${user.id}`),
-        axios.get(`http://localhost:5000/api/dsa/${user.id}`),
-        axios.get(`http://localhost:5000/api/aptitude/${user.id}`)
+        axios.get(`https://dsa-tracker-oteb.onrender.com/api/revision/${user.id}`),
+        axios.get(`https://dsa-tracker-oteb.onrender.com/api/dsa/${user.id}`),
+        axios.get(`https://dsa-tracker-oteb.onrender.com/api/aptitude/${user.id}`)
       ]);
       
       setRevisions(revRes.data);
@@ -51,7 +51,7 @@ const RevisionSchedule = () => {
   // --- Functions: Revisions ---
   const handleCompleteRevision = async (id) => {
     try {
-      await axios.post(`http://localhost:5000/api/revision/${id}/complete`);
+      await axios.post(`https://dsa-tracker-oteb.onrender.com/api/revision/${id}/complete`);
       fetchData();
       showToast('Revision marked complete!');
     } catch (err) {
@@ -67,7 +67,7 @@ const RevisionSchedule = () => {
 
   const saveDsaEdit = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/dsa/${editingDsa.logId}/problem/${editingDsa.problemId}`, dsaEditForm);
+      await axios.put(`https://dsa-tracker-oteb.onrender.com/api/dsa/${editingDsa.logId}/problem/${editingDsa.problemId}`, dsaEditForm);
       setEditingDsa(null);
       fetchData();
       showToast('Problem updated!');
@@ -79,7 +79,7 @@ const RevisionSchedule = () => {
   const deleteDsaProblem = async (logId, problemId) => {
     if (!window.confirm("Delete this problem completely?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/dsa/${logId}/problem/${problemId}`);
+      await axios.delete(`https://dsa-tracker-oteb.onrender.com/api/dsa/${logId}/problem/${problemId}`);
       fetchData();
       showToast('Problem deleted!');
     } catch (err) {
@@ -95,7 +95,7 @@ const RevisionSchedule = () => {
 
   const saveAptiEdit = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/aptitude/${editingApti}`, {
+      await axios.put(`https://dsa-tracker-oteb.onrender.com/api/aptitude/${editingApti}`, {
         topicCovered: aptiEditForm.topicCovered,
         durationMinutes: parseInt(aptiEditForm.durationMinutes) || 0
       });
@@ -110,7 +110,7 @@ const RevisionSchedule = () => {
   const deleteAptiLog = async (logId) => {
     if (!window.confirm("Delete this aptitude record completely?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/aptitude/${logId}`);
+      await axios.delete(`https://dsa-tracker-oteb.onrender.com/api/aptitude/${logId}`);
       fetchData();
       showToast('Aptitude log deleted!');
     } catch (err) {

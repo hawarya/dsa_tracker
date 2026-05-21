@@ -27,7 +27,7 @@ const Dashboard = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
-      const res = await axios.get(`http://localhost:5000/api/dashboard/${user.id}`);
+      const res = await axios.get(`https://dsa-tracker-oteb.onrender.com/api/dashboard/${user.id}`);
       setStats(res.data);
     } catch (err) {
       console.error('Failed to fetch dashboard stats', err);
@@ -44,7 +44,7 @@ const Dashboard = () => {
     e.preventDefault();
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      await axios.put('http://localhost:5000/api/auth/setup', {
+      await axios.put('https://dsa-tracker-oteb.onrender.com/api/auth/setup', {
         userId: user.id,
         dsaDailyTarget: setupTarget
       });

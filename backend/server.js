@@ -6,7 +6,9 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://dsa-tracker-z3gr.vercel.app/"
+}));
 app.use(express.json());
 
 // Database connection

@@ -19,7 +19,7 @@ const DSATracker = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
-      const res = await axios.get(`http://localhost:5000/api/dashboard/${user.id}`);
+      const res = await axios.get(`https://dsa-tracker-oteb.onrender.com/api/dashboard/${user.id}`);
       setDailyTarget(res.data.user.dsaDailyTarget || 5);
     } catch (err) {
       console.error('Failed to fetch user target', err);
@@ -30,7 +30,7 @@ const DSATracker = () => {
      try {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) return;
-        const res = await axios.get(`http://localhost:5000/api/dsa/${user.id}`);
+        const res = await axios.get(`https://dsa-tracker-oteb.onrender.com/api/dsa/${user.id}`);
         setHistoryLogs(res.data);
         
         // Group by pattern
@@ -68,7 +68,7 @@ const DSATracker = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
       
-      const res = await axios.post('http://localhost:5000/api/dsa', {
+      const res = await axios.post('https://dsa-tracker-oteb.onrender.com/api/dsa', {
         userId: user.id,
         problems
       });
@@ -93,7 +93,7 @@ const DSATracker = () => {
 
   const handleEditSubmit = async () => {
       try {
-          await axios.put(`http://localhost:5000/api/dsa/${editingProblem.logId}/problem/${editingProblem.problemId}`, editForm);
+          await axios.put(`https://dsa-tracker-oteb.onrender.com/api/dsa/${editingProblem.logId}/problem/${editingProblem.problemId}`, editForm);
           setEditingProblem(null);
           fetchHistory();
       } catch (err) {
@@ -104,7 +104,7 @@ const DSATracker = () => {
   const handleDelete = async (logId, problemId) => {
       if (!window.confirm("Delete this problem? This may affect your streaks!")) return;
       try {
-          await axios.delete(`http://localhost:5000/api/dsa/${logId}/problem/${problemId}`);
+          await axios.delete(`https://dsa-tracker-oteb.onrender.com/api/dsa/${logId}/problem/${problemId}`);
           fetchHistory();
       } catch (err) {
           console.error("Failed to delete", err);
