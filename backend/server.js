@@ -7,7 +7,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://dsa-tracker-mefa.vercel.app/"
+  origin: "https://dsa-tracker-mefa.vercel.app"
 }));
 app.use(express.json());
 
