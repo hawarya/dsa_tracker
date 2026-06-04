@@ -4,26 +4,29 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-
+app.use((req, res, next) => {
+  console.log("Origin:", req.headers.origin);
+  next();
+});
 // Middleware
 app.use(cors({
   origin: [
     "https://dsa-tracker-cmdz.vercel.app",
-    "http://localhost:5173",
-    "http://localhost:3000"
+    "http://localhost:5173"
+
   ],
   credentials: true
 }));
 app.use(express.json());
 
 // Database connection
-const PORT = process.env.PORT;
-const MONGO_URI = process.env.MONGO_URI ;
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
-  app.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Backend Running");
 });
 
