@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Target, CheckSquare, BookOpen, Flame, Award, List, Code2, RefreshCw, Clock, ExternalLink, ArrowRight } from 'lucide-react';
 
-const API = 'https://dsa-tracker-oteb.onrender.com';
+const API = 'https://dsa-tracker-mxj5.onrender.com';
 
 function timeAgo(dateStr) {
   if (!dateStr) return 'Never synced';
@@ -43,7 +43,7 @@ const Dashboard = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
-      const res = await axios.get(`https://dsa-tracker-oteb.onrender.com/api/dashboard/${user.id}`);
+      const res = await axios.get(`https://dsa-tracker-mxj5.onrender.com/api/dashboard/${user.id}`);
       setStats(res.data);
     } catch (err) {
       console.error('Failed to fetch dashboard stats', err);
@@ -83,7 +83,7 @@ const Dashboard = () => {
     e.preventDefault();
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      await axios.put('https://dsa-tracker-oteb.onrender.com/api/auth/setup', {
+      await axios.put('https://dsa-tracker-mxj5.onrender.com/api/auth/setup', {
         userId: user.id,
         dsaDailyTarget: setupTarget
       });

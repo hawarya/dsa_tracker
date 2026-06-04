@@ -7,7 +7,7 @@ import {
   Star, Zap, Shield, Award, TrendingUp
 } from 'lucide-react';
 
-const API = 'https://dsa-tracker-oteb.onrender.com';
+const API = 'https://dsa-tracker-mxj5.onrender.com';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function getUser() {

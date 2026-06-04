@@ -19,7 +19,7 @@ const AptitudeTracker = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
       
-      const res = await axios.get(`https://dsa-tracker-oteb.onrender.com/api/dashboard/${user.id}`);
+      const res = await axios.get(`https://dsa-tracker-mxj5.onrender.com/api/dashboard/${user.id}`);
       if (res.data.aptitudeCycle) {
         setActiveCycle(res.data.aptitudeCycle);
         if (!topicCovered) setTopicCovered(res.data.aptitudeCycle.currentTopic);
@@ -34,7 +34,7 @@ const AptitudeTracker = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
       
-      const res = await axios.get(`https://dsa-tracker-oteb.onrender.com/api/aptitude/${user.id}`);
+      const res = await axios.get(`https://dsa-tracker-mxj5.onrender.com/api/aptitude/${user.id}`);
       setHistory(res.data);
     } catch (err) {
       console.error('Error fetching aptitude history', err);
@@ -53,7 +53,7 @@ const AptitudeTracker = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) return;
 
-      const res = await axios.post('https://dsa-tracker-oteb.onrender.com/api/aptitude', {
+      const res = await axios.post('https://dsa-tracker-mxj5.onrender.com/api/aptitude', {
         userId: user.id,
         topicCovered,
         durationMinutes: parseInt(durationMinutes) || 0
@@ -80,7 +80,7 @@ const AptitudeTracker = () => {
 
   const handleUpdate = async (logId) => {
       try {
-          await axios.put(`https://dsa-tracker-oteb.onrender.com/api/aptitude/${logId}`, {
+          await axios.put(`https://dsa-tracker-mxj5.onrender.com/api/aptitude/${logId}`, {
              topicCovered: editTopic,
              durationMinutes: parseInt(editDuration) || 0
           });
@@ -94,7 +94,7 @@ const AptitudeTracker = () => {
   const handleDelete = async (logId) => {
       if (!window.confirm("Delete this record?")) return;
       try {
-          await axios.delete(`https://dsa-tracker-oteb.onrender.com/api/aptitude/${logId}`);
+          await axios.delete(`https://dsa-tracker-mxj5.onrender.com/api/aptitude/${logId}`);
           fetchHistory();
       } catch (err) {
           console.error("Failed to delete", err);

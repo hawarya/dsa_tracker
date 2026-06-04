@@ -13,7 +13,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://dsa-tracker-oteb.onrender.com/api/auth/register', { name, email, password });
+      const res = await axios.post('https://dsa-tracker-mxj5.onrender.com/api/auth/register', { name, email, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/');
