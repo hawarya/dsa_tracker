@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import DSATracker from './pages/DSATracker';
 import AptitudeTracker from './pages/AptitudeTracker';
 import RevisionSchedule from './pages/RevisionSchedule';
+import LeetCodeTracker from './pages/LeetCodeTracker';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/dsa" element={<DSATracker />} />
             <Route path="/aptitude" element={<AptitudeTracker />} />
             <Route path="/revision" element={<RevisionSchedule />} />
+            <Route path="/leetcode" element={<LeetCodeTracker />} />
           </Routes>
         </main>
       </div>

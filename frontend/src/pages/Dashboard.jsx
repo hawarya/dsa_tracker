@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Target, CheckSquare, BookOpen, Flame, Award, List } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Target, CheckSquare, BookOpen, Flame, Award, List, Code2, RefreshCw, Clock, ExternalLink, ArrowRight } from 'lucide-react';
+
+const API = 'https://dsa-tracker-oteb.onrender.com';
+
+function timeAgo(dateStr) {
+  if (!dateStr) return 'Never synced';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
 
 const StatCard = ({ title, value, icon: Icon, colorClass }) => (
   <motion.div 
@@ -22,6 +36,8 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [setupTarget, setSetupTarget] = useState(5);
+  const [lcSyncing, setLcSyncing] = useState(false);
+  const [lcSyncMsg, setLcSyncMsg] = useState('');
 
   const fetchStats = async () => {
     try {
@@ -36,8 +52,31 @@ const Dashboard = () => {
     }
   };
 
+  const syncLeetCode = async (userId) => {
+    setLcSyncing(true);
+    try {
+      const res = await axios.get(`${API}/api/leetcode/sync/${userId}`);
+      const n = res.data.newProblemsAutoLogged;
+      if (n > 0) setLcSyncMsg(`✨ ${n} new problem${n > 1 ? 's' : ''} auto-logged!`);
+      fetchStats();
+    } catch { }
+    finally {
+      setLcSyncing(false);
+      setTimeout(() => setLcSyncMsg(''), 4000);
+    }
+  };
+
   useEffect(() => {
-    fetchStats();
+    const doLoad = async () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      await fetchStats();
+      if (user?.id) {
+        // Auto-sync LeetCode in background if connected
+        const lcCheck = await axios.get(`${API}/api/leetcode/stats/${user.id}`).catch(() => null);
+        if (lcCheck?.data?.connected) syncLeetCode(user.id);
+      }
+    };
+    doLoad();
   }, []);
 
   const handleSetupSubmit = async (e) => {
@@ -193,6 +232,103 @@ const Dashboard = () => {
           colorClass="text-indigo-500" 
         />
       </div>
+
+      {/* ── LeetCode Summary Card ── */}
+      {stats.leetcode?.connected ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-br from-slate-800/80 to-violet-950/40 border border-violet-500/20 rounded-2xl p-6 shadow-xl relative overflow-hidden"
+        >
+          {/* accent bar */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500" />
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30">
+                <Code2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">LeetCode</h3>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span className="text-slate-400 text-xs">{stats.leetcode.username}</span>
+                  <span className="text-slate-600 text-xs">·</span>
+                  <span className="text-slate-500 text-xs flex items-center gap-1"><Clock className="w-3 h-3" />{timeAgo(stats.leetcode.lastSyncedAt)}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {lcSyncMsg && <span className="text-xs text-violet-300 bg-violet-500/10 border border-violet-500/20 px-2 py-1 rounded-lg">{lcSyncMsg}</span>}
+              <button
+                onClick={() => { const u = JSON.parse(localStorage.getItem('user')); syncLeetCode(u.id); }}
+                disabled={lcSyncing}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-600/80 hover:bg-violet-500 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3 h-3 ${lcSyncing ? 'animate-spin' : ''}`} />
+                {lcSyncing ? 'Syncing…' : 'Sync'}
+              </button>
+              <Link to="/leetcode" className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-medium rounded-lg transition-colors">
+                Full Analytics <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-4 mt-6">
+            {[
+              { label: 'Easy',   value: stats.leetcode.easySolved,   color: 'text-emerald-400', dot: 'bg-emerald-400' },
+              { label: 'Medium', value: stats.leetcode.mediumSolved, color: 'text-amber-400',   dot: 'bg-amber-400'   },
+              { label: 'Hard',   value: stats.leetcode.hardSolved,   color: 'text-red-400',     dot: 'bg-red-400'     },
+            ].map(s => (
+              <div key={s.label} className="bg-slate-900/50 rounded-xl p-4 text-center">
+                <div className={`text-2xl font-extrabold ${s.color}`}>{s.value}</div>
+                <div className="flex items-center justify-center gap-1 mt-1">
+                  <div className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
+                  <span className="text-xs text-slate-400">{s.label}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Recent submissions mini-list */}
+          {stats.leetcode.recentSubmissions?.length > 0 && (
+            <div className="mt-4 space-y-2">
+              <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Recent accepted</p>
+              {stats.leetcode.recentSubmissions.slice(0, 3).map((s, i) => (
+                <div key={i} className="flex items-center justify-between text-sm">
+                  <span className="text-slate-300 truncate max-w-[60%]">{s.title}</span>
+                  <span className={`text-xs font-semibold ${
+                    s.difficulty === 'Easy' ? 'text-emerald-400' :
+                    s.difficulty === 'Hard' ? 'text-red-400' : 'text-amber-400'
+                  }`}>{s.difficulty}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+            <span className="text-slate-400 text-sm">Total Solved</span>
+            <span className="text-2xl font-extrabold text-violet-400">{stats.leetcode.totalSolved}</span>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="border border-dashed border-violet-500/30 rounded-2xl p-6 flex items-center justify-between bg-violet-500/5"
+        >
+          <div className="flex items-center gap-3">
+            <Code2 className="w-8 h-8 text-violet-400/60" />
+            <div>
+              <p className="text-white font-semibold">Connect your LeetCode profile</p>
+              <p className="text-slate-400 text-sm">Auto-log solved problems with zero manual effort</p>
+            </div>
+          </div>
+          <Link to="/leetcode" className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-2">
+            Connect <ArrowRight className="w-4 h-4" />
+          </Link>
+        </motion.div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
          {/* Milestones / Badges */}

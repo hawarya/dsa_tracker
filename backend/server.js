@@ -7,7 +7,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://dsa-tracker-mefa.vercel.app"
+  origin: [
+    "https://dsa-tracker-mefa.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
 }));
 app.use(express.json());
 
@@ -28,6 +33,7 @@ app.use('/api/dsa', require('./routes/dsa'));
 app.use('/api/aptitude', require('./routes/aptitude'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/revision', require('./routes/revision'));
+app.use('/api/leetcode', require('./routes/leetcode'));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

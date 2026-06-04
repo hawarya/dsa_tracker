@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, CheckSquare, Target, LogOut, Home } from 'lucide-react';
+import { BookOpen, CheckSquare, Target, LogOut, Home, Code2 } from 'lucide-react';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -34,6 +34,9 @@ const Navbar = () => {
               </Link>
               <Link to="/revision" className="flex items-center space-x-1 text-slate-300 hover:text-white transition-colors">
                 <Target className="w-4 h-4" /><span>Revisions</span>
+              </Link>
+              <Link to="/leetcode" className="flex items-center space-x-1 text-violet-400 hover:text-violet-300 transition-colors font-medium">
+                <Code2 className="w-4 h-4" /><span>LeetCode</span>
               </Link>
               <button onClick={handleLogout} className="flex items-center space-x-1 text-red-400 hover:text-red-300 transition-colors ml-4">
                 <LogOut className="w-4 h-4" /><span>Logout</span>

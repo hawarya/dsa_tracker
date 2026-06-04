@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   dsaDailyTarget: { type: Number, default: 0 },
   isFirstLogin: { type: Boolean, default: true },
+  leetcodeUsername: { type: String, default: null },
+  leetcodeConnected: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

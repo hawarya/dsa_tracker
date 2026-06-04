@@ -5,6 +5,7 @@ const DSADaily = require('../models/DSADaily');
 const AptitudeLog = require('../models/AptitudeLog');
 const AptitudeCycle = require('../models/AptitudeCycle');
 const User = require('../models/User');
+const LeetCodeCache = require('../models/LeetCodeCache');
 
 router.get('/:userId', async (req, res) => {
   try {
@@ -30,6 +31,20 @@ router.get('/:userId', async (req, res) => {
 
     const aptiLogs = await AptitudeLog.find({ userId });
     const aptitudeCycle = await AptitudeCycle.findOne({ userId });
+
+    // LeetCode summary
+    const lcCache = await LeetCodeCache.findOne({ userId });
+    const leetcode = user.leetcodeConnected && lcCache ? {
+      connected: true,
+      username: lcCache.username,
+      totalSolved: lcCache.totalSolved,
+      easySolved: lcCache.easySolved,
+      mediumSolved: lcCache.mediumSolved,
+      hardSolved: lcCache.hardSolved,
+      ranking: lcCache.ranking,
+      lastSyncedAt: lcCache.lastSyncedAt,
+      recentSubmissions: (lcCache.recentSubmissions || []).slice(0, 5),
+    } : { connected: false };
     
     // Today's DSA Solved
     const todayStart = new Date();
@@ -41,14 +56,17 @@ router.get('/:userId', async (req, res) => {
       user: {
         dsaDailyTarget: user.dsaDailyTarget,
         isFirstLogin: user.isFirstLogin,
-        name: user.name
+        name: user.name,
+        leetcodeConnected: user.leetcodeConnected,
+        leetcodeUsername: user.leetcodeUsername,
       },
       streak: streak || { dsaStreak: 0, aptitudeStreak: 0 },
       dsaSolvedToday,
       totalDsaProblems,
       totalAptitudeTopics: aptiLogs.length,
       aptitudeCycle: aptitudeCycle || null,
-      patternCounts
+      patternCounts,
+      leetcode,
     });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
