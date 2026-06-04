@@ -8,7 +8,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: [
-    "https://dsa-tracker-cmdz.vercel.app/",
+    "https://dsa-tracker-cmdz.vercel.app",
     "http://localhost:5173",
     "http://localhost:3000"
   ],
