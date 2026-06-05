@@ -11,7 +11,7 @@ app.use((req, res, next) => {
 // Middleware
 app.use(cors({
   origin: [
-    "https://dsa-tracker-cmdz.vercel.app",
+    "https://dsa-tracker-nine-indol.vercel.app",
     "http://localhost:5173"
 
   ],
